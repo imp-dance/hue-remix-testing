@@ -8,7 +8,7 @@ A simple light controller app made with remix.
 
 To pair with your device you can follow these steps.
 
-1. Clone the project.
+1. Clone the project. `git clone git@github.com:imp-dance/hue-remix-testing.git` and navigate into it
 2. Create a `.env` file in the root of the project. Fill it with the following:
 
 ```bash
@@ -17,8 +17,8 @@ CLIENTKEY=x
 CONNECTION=x
 ```
 
-3. Install the dependencies
-4. Launch the dev server.
+3. Install the dependencies `npm i`
+4. Launch the dev server. `npm run dev`
 5. Navigate to the `/connect` route. You will be prompted for an IP address. To find this, open up your hue app,
 then go to settings > bridge settings. In the bridge settings you should be able to see the IP address. Enter this into the input. (you might have to use `http` for the initial connection request).
 
