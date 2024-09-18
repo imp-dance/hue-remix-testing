@@ -2,9 +2,14 @@
 
 A simple light controller app made with remix.
 
+![Screenshot 2024-09-19 at 01 26 49](https://github.com/user-attachments/assets/c6aff806-9460-42b9-b906-084533f44a0c)
+
 ## Pairing with your device
 
-To pair with your device, first clone the project and create a `.env` file in the root of the project. Fill it with the following:
+To pair with your device you can follow these steps.
+
+1. Clone the project.
+2. Create a `.env` file in the root of the project. Fill it with the following:
 
 ```bash
 USERNAME=x
@@ -12,7 +17,9 @@ CLIENTKEY=x
 CONNECTION=x
 ```
 
-Install the dependencies and launch the dev server. Navigate to the `/connect` route. You will be prompted for an IP address. To find this, open up your hue app,
+3. Install the dependencies
+4. Launch the dev server.
+5. Navigate to the `/connect` route. You will be prompted for an IP address. To find this, open up your hue app,
 then go to settings > bridge settings. In the bridge settings you should be able to see the IP address. Enter this into the input. (you might have to use `http` for the initial connection request).
 
 After filling in the input, head over to your physical device.
