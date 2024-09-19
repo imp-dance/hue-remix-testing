@@ -49,6 +49,8 @@ export type FetchConfig = Omit<
   method?: "PUT" | "DELETE" | "POST" | "GET";
 };
 
+type Coord = { x: number; y: number };
+
 export type Light = {
   id: string;
   id_v1: string;
@@ -72,7 +74,9 @@ export type Light = {
   }[];
   type: string;
   color: {
-    xy: { x: number; y: number };
+    xy: Coord;
+    gamut: { red: Coord; green: Coord; blue: Coord };
+    gamut_type: string;
   };
   dimming: { brightness: number; min_dim_level: number };
   on: {
@@ -104,4 +108,72 @@ export type PairFailure = {
     address: string;
     description: string;
   };
+};
+
+export type EntertainmentConfigurationResponse = {
+  errors: unknown[];
+  data: EntertainmentConfiguration[];
+};
+
+type EntertainmentConfiguration = {
+  id: string;
+  type: "entertainment_configuration";
+  id_v1: string;
+  name: string;
+  status: "active" | "inactive";
+  configuration_type: "music" | "screen";
+  metadata: {
+    name: string;
+  };
+  stream_proxy: {
+    mode: string;
+    node: {
+      rtype: "entertainment";
+      rid: string;
+    };
+  };
+  channels: Channel[];
+  locations: {
+    service_locations: ServiceLocation[];
+  };
+  light_services: LightService[];
+  active_streamer?: {
+    rid: string;
+    rtype: "auth_v1";
+  };
+};
+
+type Channel = {
+  channel_id: number;
+  position: Position;
+  members: ChannelMember[];
+};
+
+type ChannelMember = {
+  service: {
+    rtype: "entertainment";
+    rid: string;
+  };
+  index: number;
+};
+
+type Position = {
+  x: number;
+  y: number;
+  z: number;
+};
+
+type ServiceLocation = {
+  service: {
+    rtype: "entertainment";
+    rid: string;
+  };
+  positions: Position[];
+  equalization_factor: number;
+  position: Position;
+};
+
+type LightService = {
+  rtype: "light";
+  rid: string;
 };

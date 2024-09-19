@@ -4,6 +4,15 @@ input[type="color"] {
   background: transparent;
   box-shadow: 10px 10px 50px #000;
 }
+
+input[type="color"]:hover::after {
+  background: #fff;
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 input[type="color"]::-webkit-color-swatch-wrapper {
   padding: 0;
 }

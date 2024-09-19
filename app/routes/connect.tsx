@@ -67,7 +67,7 @@ export default function ConnectRoute() {
                 <pre>
                   {`USERNAME=${credentials.username}
 CLIENTKEY=${credentials.clientkey}
-CONNECTION=${
+BRIDGE_CONNECTION=${
                     ip.startsWith("http")
                       ? `https${ip.substring(4)}`
                       : ip

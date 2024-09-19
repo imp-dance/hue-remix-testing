@@ -1,6 +1,10 @@
 // Render only on client
 
-import { HomeIcon, SunIcon } from "@radix-ui/react-icons";
+import {
+  DesktopIcon,
+  HomeIcon,
+  SunIcon,
+} from "@radix-ui/react-icons";
 import {
   Box,
   Button,
@@ -8,6 +12,7 @@ import {
   Flex,
   Grid,
   Heading,
+  Select,
   Slider,
   Switch,
   Text,
@@ -17,15 +22,22 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { CSSProperties, useState } from "react";
+import { CSSProperties, memo, useState } from "react";
 import type { Light } from "../lib/hueApi.types";
-import { getLights, getRooms } from "./clientApi";
+import {
+  getEntertainment,
+  getLights,
+  getRooms,
+  setChannel,
+} from "./clientApi";
 import { useDebounceCallback } from "./useDebounceCallback";
-import { hexToRgb, rgbToHex, rgbToXY, xybToRGB } from "./utils";
+import { hexToRgb, rgbToHex } from "./utils";
+import { rgbToXy, xyToRgb } from "./xyzrgb";
 
 const queryKeys = {
   lights: "lights",
   rooms: "rooms",
+  entertainment: "entertainment",
 };
 
 export function App() {
@@ -59,6 +71,7 @@ export function App() {
       <Heading size={{ initial: "5", md: "6", lg: "7" }}>
         Trollhammaren
       </Heading>
+      <ChannelSwitcher />
       {rooms.map((room) => {
         const children = (
           room.children
@@ -123,6 +136,63 @@ export function App() {
   );
 }
 
+const ChannelSwitcher = memo(() => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: setChannel,
+    mutationKey: ["setEntertainment"],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.entertainment],
+      });
+    },
+  });
+  const entertainmentQuery = useQuery({
+    queryFn: getEntertainment,
+    queryKey: [queryKeys.entertainment],
+    refetchInterval: 2000,
+  });
+  if (!entertainmentQuery.data) return null;
+
+  const inputs = Object.keys(entertainmentQuery.data.hdmi)
+    .filter((k) => k.startsWith("input"))
+    .map((k) => ({
+      id: k,
+      ...entertainmentQuery.data.hdmi[k as "input1"],
+    }));
+
+  const activeInput =
+    entertainmentQuery.data.execution.hdmiSource;
+
+  return (
+    <Flex align="center" gap="2" width="100%">
+      <DesktopIcon />
+      <Select.Root
+        value={activeInput}
+        onValueChange={(value) => {
+          mutation.mutate(value as "input1");
+        }}
+        disabled={mutation.isPending}
+      >
+        <Select.Trigger style={{ flexGrow: 1 }} />
+        <Select.Content>
+          <Select.Group>
+            <Select.Label>Change TV source</Select.Label>
+            {inputs.map((input) => (
+              <Select.Item key={input.id} value={input.id}>
+                {input.name}
+              </Select.Item>
+            ))}
+          </Select.Group>
+          <Select.Separator />
+        </Select.Content>
+      </Select.Root>
+    </Flex>
+  );
+});
+
+ChannelSwitcher.displayName = "ChannelSwitcher";
+
 function LightCard(props: { light: Light }) {
   const mutation = useUpdateLightMutation();
   const debouncedMutate = useDebounceCallback(
@@ -135,10 +205,16 @@ function LightCard(props: { light: Light }) {
   const [requestedBrightness, setRequestedBrightness] = useState(
     light.dimming.brightness
   );
-  const serverRgb = xybToRGB(
+  const gamut = {
+    r: light.color.gamut.red,
+    g: light.color.gamut.green,
+    b: light.color.gamut.blue,
+  };
+  const serverRgb = xyToRgb(
     light.color.xy.x,
     light.color.xy.y,
-    requestedBrightness
+    requestedBrightness,
+    gamut
   );
   const [requestedHex, setRequestedHex] = useState(
     rgbToHex(serverRgb.r, serverRgb.g, serverRgb.b)
@@ -155,6 +231,9 @@ function LightCard(props: { light: Light }) {
             : undefined,
           textTransform: "uppercase",
           position: "relative",
+          filter: `brightness(${
+            0.3 + (requestedBrightness / 100) * 0.7
+          })`,
         } as CSSProperties
       }
       asChild
@@ -172,6 +251,7 @@ function LightCard(props: { light: Light }) {
         }}
         disabled={mutation.isPending}
         variant="soft"
+        title="Click to toggle light"
       >
         <Flex
           direction="column"
@@ -224,6 +304,7 @@ function LightCard(props: { light: Light }) {
               <Slider
                 color="gray"
                 variant="classic"
+                title="Click and drag to change brightness"
                 value={[requestedBrightness]}
                 onValueChange={([value]) => {
                   setRequestedBrightness(value);
@@ -253,6 +334,7 @@ function LightCard(props: { light: Light }) {
             <input
               type="color"
               value={requestedHex}
+              title="Click to change color"
               style={{
                 position: "absolute",
                 right: 0,
@@ -262,7 +344,7 @@ function LightCard(props: { light: Light }) {
                 width: "10%",
                 border: "none",
                 opacity: 0.2,
-                cursor: "grab",
+                cursor: "pointer",
               }}
               onClick={(e) => e.stopPropagation()}
               onChange={(e) => {
@@ -270,7 +352,7 @@ function LightCard(props: { light: Light }) {
                 const newValue = hexToRgb(e.target.value);
                 if (!newValue) return;
                 const { r, g, b } = newValue;
-                const { x, y } = rgbToXY(r, g, b);
+                const { x, y } = rgbToXy(r, g, b, gamut);
                 debouncedMutate({
                   id: light.id,
                   color: {
