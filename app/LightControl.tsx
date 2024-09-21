@@ -27,35 +27,36 @@ export function LightControl(props: { light: Light }) {
   const [requestedBrightness, setRequestedBrightness] = useState(
     light.dimming.brightness
   );
-  const gamut = {
-    r: light.color.gamut.red,
-    g: light.color.gamut.green,
-    b: light.color.gamut.blue,
-  };
+
+  const gamut = retrieveGamut(light);
+
   const serverRgb = xyToRgb(
     light.color.xy.x,
     light.color.xy.y,
-    requestedBrightness,
+    light.dimming.brightness,
     gamut
   );
   const [requestedHex, setRequestedHex] = useState(
     rgbToHex(serverRgb.r, serverRgb.g, serverRgb.b)
   );
   const { r, g, b } = hexToRgb(requestedHex)!;
-  const rgb = `rgb(${r}, ${g}, ${b})`;
+
+  const background = light.on.on
+    ? `rgb(${r}, ${g}, ${b})`
+    : undefined;
+  const filter = `brightness(${
+    0.3 + (requestedBrightness / 100) * 0.7
+  })`;
 
   return (
     <Card
       style={
         {
-          "--card-background-color": light.on.on
-            ? rgb
-            : undefined,
+          "--card-background-color": background,
           textTransform: "uppercase",
           position: "relative",
-          filter: `brightness(${
-            0.3 + (requestedBrightness / 100) * 0.7
-          })`,
+          filter,
+          minWidth: "min(250px, 100%)",
         } as CSSProperties
       }
       asChild
@@ -178,10 +179,15 @@ export function LightControl(props: { light: Light }) {
                 debouncedMutate({
                   id: light.id,
                   color: {
-                    x,
-                    y,
+                    x: Math.min(1, Math.max(0, x)),
+                    y: Math.min(1, Math.max(0, y)),
                   },
                 });
+              }}
+              onBlur={() => {
+                setRequestedHex(
+                  rgbToHex(serverRgb.r, serverRgb.g, serverRgb.b)
+                );
               }}
             />
           </>
@@ -189,4 +195,12 @@ export function LightControl(props: { light: Light }) {
       </Button>
     </Card>
   );
+}
+
+function retrieveGamut(light: Light) {
+  return {
+    r: light.color.gamut.red,
+    g: light.color.gamut.green,
+    b: light.color.gamut.blue,
+  };
 }

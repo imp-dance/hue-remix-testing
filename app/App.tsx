@@ -1,13 +1,7 @@
 // Render only on client
 
 import { HomeIcon } from "@radix-ui/react-icons";
-import {
-  Card,
-  Flex,
-  Grid,
-  Heading,
-  Switch,
-} from "@radix-ui/themes";
+import { Card, Flex, Heading, Switch } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import type { Light } from "../lib/hueApi.types";
 import { ChannelSwitcher } from "./ChannelSwitcher";
@@ -45,7 +39,7 @@ export function App() {
       p="5"
       direction="column"
       gap="5"
-      maxWidth="1200px"
+      maxWidth="850px"
       style={{ marginInline: "auto" }}
     >
       <Heading size={{ initial: "5", md: "6", lg: "7" }}>
@@ -96,10 +90,7 @@ export function App() {
                   />
                 </Flex>
               </Heading>
-              <Grid
-                columns={{ sm: "2", md: "3", lg: "4" }}
-                gap="3"
-              >
+              <Flex wrap="wrap" gap="3">
                 {lights
                   .filter(
                     (device) =>
@@ -113,7 +104,7 @@ export function App() {
                       key={device.id}
                     />
                   ))}
-              </Grid>
+              </Flex>
             </Flex>
           </Card>
         );
