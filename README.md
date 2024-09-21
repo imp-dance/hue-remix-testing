@@ -22,6 +22,9 @@ You will need to pair your device(s) before opening the root route.
 3. Launch the dev server. `npm run dev` The terminal will show you the localhost url for the project.
 4. Navigate to the `localhost:<port>/connect` route.
 
+![Screenshot 2024-09-21 at 14 29 53](https://github.com/user-attachments/assets/4c1d425d-336d-4955-8edb-ca1271380c77)
+
+
 ### Finding your connection IP
 
 #### Bridge
