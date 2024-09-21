@@ -9,6 +9,12 @@ import { hueApi } from "../../services/hueApi";
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function loader(args: LoaderFunctionArgs) {
+  if (!hueApi.syncbox) {
+    return json(
+      { error: "Sync box not configured" },
+      { status: 400 }
+    );
+  }
   return json(
     await hueApi.syncboxRequest<{ data: unknown }>(
       "GET",
@@ -18,6 +24,12 @@ export async function loader(args: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  if (!hueApi.syncbox) {
+    return json(
+      { error: "Sync box not configured" },
+      { status: 400 }
+    );
+  }
   const body = z
     .object({
       action: z.literal("change_mode"),

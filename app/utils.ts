@@ -1,4 +1,5 @@
 import ColorConverter from "cie-rgb-color-converter";
+import { Device, Group } from "panasonic-comfort-cloud-client";
 
 export const xybToRGB = ColorConverter.xyBriToRgb;
 export const rgbToXY = ColorConverter.rgbToXy;
@@ -35,3 +36,10 @@ export function rgbToHex(
 }
 
 /*** */
+
+export function extractDeviceFromGroups(
+  groups: Group[]
+): Device {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (groups[0] as any)?._devices?.[0];
+}
