@@ -1,8 +1,6 @@
-# Hue-remix light controller app
+# Smart house hub (Hue, Sync box, Comfort Cloud)
 
 A simple light controller app made with remix.
-
-![Screenshot 2024-09-19 at 01 26 49](https://github.com/user-attachments/assets/c6aff806-9460-42b9-b906-084533f44a0c)
 
 ## Prerequisites
 
