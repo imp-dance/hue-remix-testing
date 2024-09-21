@@ -2,6 +2,18 @@
 
 A simple light controller app made with remix.
 
+## Capabilities
+
+* Control lights (Hue)
+  * On/Off
+  * Color
+  * Brightness
+* Set TV channel (Sync box)
+* Control heat pump (Phillips Comfort Cloud)
+  * Temperature
+  * Mode
+  * Fan speed
+
 ## Prerequisites
 
 * [Node & NPM](https://nodejs.org/en)
