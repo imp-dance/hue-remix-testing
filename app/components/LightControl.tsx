@@ -10,10 +10,10 @@ import {
 } from "@radix-ui/themes";
 import { Light } from "lib/hueApi.types";
 import { CSSProperties, useState } from "react";
-import { useUpdateLightMutation } from "./clientApi";
-import { useDebounceCallback } from "./useDebounceCallback";
-import { hexToRgb, rgbToHex } from "./utils";
-import { rgbToXy, xyToRgb } from "./xyzrgb";
+import { rgbToXy, xyToRgb } from "../../lib/xyzrgb";
+import { useUpdateLightMutation } from "../clientApi";
+import { useDebounceCallback } from "../hooks/useDebounceCallback";
+import { hexToRgb, rgbToHex } from "../utils";
 
 export function LightControl(props: { light: Light }) {
   const mutation = useUpdateLightMutation();

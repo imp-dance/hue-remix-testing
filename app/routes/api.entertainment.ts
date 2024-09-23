@@ -3,7 +3,7 @@ import {
   json,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { z } from "zod";
+import { updateSyncBoxSchema } from "~/domain";
 import { hueApi } from "../../services/hueApi";
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
@@ -30,24 +30,7 @@ export async function action({ request }: ActionFunctionArgs) {
       { status: 400 }
     );
   }
-  const body = z
-    .object({
-      action: z.literal("change_mode"),
-      mode: z.enum(["game", "video", "music"]),
-    })
-    .or(
-      z.object({
-        action: z.literal("set_channel"),
-        channel: z.string(),
-      })
-    )
-    .or(
-      z.object({
-        action: z.literal("set_channel"),
-        channel: z.string(),
-      })
-    )
-    .parse(await request.json());
+  const body = updateSyncBoxSchema.parse(await request.json());
 
   switch (body.action) {
     case "change_mode": {

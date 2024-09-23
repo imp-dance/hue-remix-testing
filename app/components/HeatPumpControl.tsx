@@ -7,9 +7,9 @@ import {
 import {
   useHeatPumpEventMutation,
   useHeatPumpQuery,
-} from "./clientApi";
-import { useDebounceValue } from "./useDebounceValue";
-import { extractDeviceFromGroups } from "./utils";
+} from "../clientApi";
+import { useDebounceValue } from "../hooks/useDebounceValue";
+import { extractDeviceFromGroups } from "../utils";
 
 const modes = ["Auto", "Cool", "Dry", "Fan", "Heat"];
 const operationModeToMode = {

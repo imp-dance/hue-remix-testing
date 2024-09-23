@@ -21,7 +21,7 @@ import { useMutation } from "@tanstack/react-query";
 import { HueApi } from "lib/hueApi";
 import { PairFailure, PairSuccess } from "lib/hueApi.types";
 import { useState } from "react";
-import { Alert } from "~/Alert";
+import { Alert } from "~/components/Alert";
 
 export default function ConnectRoute() {
   const [ip, setIp] = useState("");

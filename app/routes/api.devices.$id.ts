@@ -3,7 +3,7 @@ import {
   json,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { z } from "zod";
+import { updateLightSchema } from "~/domain";
 import { hueApi } from "../../services/hueApi";
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
@@ -18,34 +18,29 @@ export async function loader(args: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const body = z
-    .object({
-      id: z.string(),
-      on: z.boolean().optional(),
-      color: z
-        .object({
-          x: z.number(),
-          y: z.number(),
-        })
-        .optional(),
-      brightness: z.number().optional(),
-    })
-    .parse(await request.json());
+  const requestArgs = updateLightSchema.parse(
+    await request.json()
+  );
 
-  const parsed = {
-    color: body.color ? { xy: body.color } : undefined,
-    on: body.on !== undefined ? { on: body.on } : undefined,
+  const body = {
+    color: requestArgs.color
+      ? { xy: requestArgs.color }
+      : undefined,
+    on:
+      requestArgs.on !== undefined
+        ? { on: requestArgs.on }
+        : undefined,
     dimming:
-      body.brightness !== undefined
-        ? { brightness: body.brightness }
+      requestArgs.brightness !== undefined
+        ? { brightness: requestArgs.brightness }
         : undefined,
   };
 
   switch (request.method) {
     case "PUT": {
       return json(
-        await hueApi.fetch(`resource/light/${body.id}`, {
-          body: parsed,
+        await hueApi.fetch(`resource/light/${requestArgs.id}`, {
+          body: body,
           method: "PUT",
         })
       );

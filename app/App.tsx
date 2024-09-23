@@ -4,15 +4,15 @@ import { HomeIcon } from "@radix-ui/react-icons";
 import { Card, Flex, Heading, Switch } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import type { Light } from "../lib/hueApi.types";
-import { ChannelSwitcher } from "./ChannelSwitcher";
 import {
   getLights,
   getRooms,
   useUpdateLightMutation,
 } from "./clientApi";
+import { ChannelSwitcher } from "./components/ChannelSwitcher";
+import { HeatPumpControl } from "./components/HeatPumpControl";
+import { LightControl } from "./components/LightControl";
 import { queryKeys } from "./constants";
-import { HeatPumpControl } from "./HeatPumpControl";
-import { LightControl } from "./LightControl";
 
 export function App() {
   const lightsQuery = useQuery({

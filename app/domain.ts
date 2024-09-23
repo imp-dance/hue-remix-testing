@@ -36,3 +36,27 @@ export const heatPumpEventSchema = z
       ]),
     })
   );
+
+export const updateSyncBoxSchema = z
+  .object({
+    action: z.literal("change_mode"),
+    mode: z.enum(["game", "video", "music"]),
+  })
+  .or(
+    z.object({
+      action: z.literal("set_channel"),
+      channel: z.string(),
+    })
+  );
+
+export const updateLightSchema = z.object({
+  id: z.string(),
+  on: z.boolean().optional(),
+  color: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+    })
+    .optional(),
+  brightness: z.number().optional(),
+});

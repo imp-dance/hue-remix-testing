@@ -6,8 +6,8 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { memo } from "react";
-import { getEntertainment, setChannel } from "./clientApi";
-import { queryKeys } from "./constants";
+import { getEntertainment, setChannel } from "../clientApi";
+import { queryKeys } from "../constants";
 
 export const ChannelSwitcher = memo(() => {
   const queryClient = useQueryClient();
