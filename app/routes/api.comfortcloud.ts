@@ -10,7 +10,7 @@ import {
   Power,
 } from "panasonic-comfort-cloud-client";
 import { heatPumpEventSchema } from "~/domain";
-import { extractDeviceFromGroups } from "~/utils";
+import { extractDeviceFromGroups } from "~/utils/comfortCloud";
 
 const client = new ComfortCloudClient();
 

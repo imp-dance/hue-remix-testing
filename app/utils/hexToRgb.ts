@@ -1,9 +1,3 @@
-import ColorConverter from "cie-rgb-color-converter";
-import { Device, Group } from "panasonic-comfort-cloud-client";
-
-export const xybToRGB = ColorConverter.xyBriToRgb;
-export const rgbToXY = ColorConverter.rgbToXy;
-
 function componentToHex(c: string | number) {
   const hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
@@ -33,13 +27,4 @@ export function rgbToHex(
     componentToHex(g) +
     componentToHex(b)
   );
-}
-
-/*** */
-
-export function extractDeviceFromGroups(
-  groups: Group[]
-): Device {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (groups[0] as any)?._devices?.[0];
 }

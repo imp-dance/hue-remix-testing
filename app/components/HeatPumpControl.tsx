@@ -9,7 +9,7 @@ import {
   useHeatPumpQuery,
 } from "../clientApi";
 import { useDebounceValue } from "../hooks/useDebounceValue";
-import { extractDeviceFromGroups } from "../utils";
+import { extractDeviceFromGroups } from "../utils/comfortCloud";
 
 const modes = ["Auto", "Cool", "Dry", "Fan", "Heat"];
 const operationModeToMode = {
