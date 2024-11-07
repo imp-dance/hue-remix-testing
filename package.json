@@ -22,6 +22,7 @@
     "isbot": "^4.1.0",
     "lodash.debounce": "^4.0.8",
     "panasonic-comfort-cloud-client": "2.0.2",
+    "radix-os": "^0.2.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zod": "^3.23.8"

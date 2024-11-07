@@ -57,6 +57,7 @@ export function LightControl(props: { light: Light }) {
           position: "relative",
           filter,
           minWidth: "min(250px, 100%)",
+          border: "none",
         } as CSSProperties
       }
       asChild
